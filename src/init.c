@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_data.c                                        :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:29:40 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/11 21:45:47 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/11 21:57:37 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-long ft_atol(const char *str)
-{
-	long res = 0;
-	int i = 0;
-	while(str[i] >= '0' && str[i] <= '9')
-		res = res * 10 + (str[i++] - '0');
-	return (res);
-}
 
 int init_data(t_data *data, int argc, char **argv)
 {
@@ -42,4 +33,24 @@ int init_data(t_data *data, int argc, char **argv)
         pthread_mutex_init(&data->forks[i], NULL);
     pthread_mutex_init(&data->print_mutex, NULL);
     return (0);
+}
+
+int	init_philosophers(t_data *data, t_philo **philos)
+{
+	int i;
+
+	i = 0;
+	*philos = malloc(sizeof(t_philo) *data->nb_philo);
+	if (!*philos)
+		return (1);
+	while(i++ < data->nb_philo)
+	{
+		(*philos)[i].id = i + 1;
+		(*philos)[i].meals_eaten = 0;
+		(*philos)[i].last_meal = 0;
+		(*philos)[i].data = data;
+		(*philos)[i].left_fork = &data->forks[i];
+		(*philos)[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+	}
+	return (0);
 }

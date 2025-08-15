@@ -11,7 +11,9 @@ INC_DIR = includes
 SRCS =	main.c \
 		$(SRC_DIR)/init.c \
 		$(SRC_DIR)/init_utils.c \
+		$(SRC_DIR)/monitor.c \
 		$(SRC_DIR)/routine.c \
+		$(SRC_DIR)/routine_utils.c 
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:55:53 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/15 14:07:07 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/15 17:15:11 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <sys/time.h>
+#include <unistd.h>
+
+//structs
 
 typedef struct s_data
 {
@@ -27,6 +29,7 @@ typedef struct s_data
 	long			time_to_sleep;
 	int				nb_meals;
 	long			start_time;
+	pthread_mutex_t death_mutex;
 	pthread_mutex_t *forks;
 	pthread_mutex_t	print_mutex;
 	int				someone_died;
@@ -43,14 +46,23 @@ typedef struct s_philo
 	t_data			*data;
 } t_philo;
 
+typedef struct s_monitor_arg
+{
+    t_data *data;
+    t_philo *philos;
+} t_monitor_arg;
+
 //init
-int 	init_data(t_data *data, int argc, char **argv);
-int		init_philosophers(t_data *data, t_philo **philos);
+int 		init_data(t_data *data, int argc, char **argv);
+int			init_philosophers(t_data *data, t_philo **philos);
 
 //routine
-void 	*philo_routine(void *arg);
+void 		*philo_routine(void *arg);
+void 		*monitor_routine(void *arg);
 
 //utils
-long	ft_atol(const char *str);
+long		ft_atol(const char *str);
+long long 	current_time_ms(void);
+void 		precise_sleep(long duration_ms);
 
 #endif

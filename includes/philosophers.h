@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:55:53 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/11 21:31:54 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/15 14:07:07 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,15 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	t_data			*data;
 } t_philo;
+
+//init
+int 	init_data(t_data *data, int argc, char **argv);
+int		init_philosophers(t_data *data, t_philo **philos);
+
+//routine
+void 	*philo_routine(void *arg);
+
+//utils
+long	ft_atol(const char *str);
 
 #endif

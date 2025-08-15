@@ -2,13 +2,16 @@
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = includes
 
-SRCS = main.c 
+SRCS =	main.c \
+		$(SRC_DIR)/init.c \
+		$(SRC_DIR)/init_utils.c \
+		$(SRC_DIR)/routine.c \
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

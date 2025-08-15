@@ -1,41 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_utils.c                                       :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/11 21:49:45 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/15 13:43:07 by tlize            ###   ########.fr       */
+/*   Created: 2025/08/15 14:05:36 by tlize             #+#    #+#             */
+/*   Updated: 2025/08/15 14:06:52 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static int	ft_isdigit(int c)
+void *philo_routine(void *arg)
 {
-	if (c > 57 || c < 48)
-		return (0);
-	return (2048);
-}
+    t_philo *philo = (t_philo *)arg;
 
-long	ft_atol(const char *s)
-{
-	long	result;
-	int		sign;
+    pthread_mutex_lock(&philo->data->print_mutex);
+    printf("Philosophe %d démarre sa routine\n", philo->id);
+    pthread_mutex_unlock(&philo->data->print_mutex);
 
-	result = 0;
-	sign = 1;
-	while (*s == ' ' || *s == '\t' || *s == '\n' || \
-			*s == '\r' || *s == '\f' || *s == '\v')
-		s++;
-	if (*s == '-' || *s == '+')
-	{
-		if (*s == '-')
-			sign = -1;
-		s++;
-	}
-	while (ft_isdigit(*s))
-		result = result * 10 + (*s++ - '0');
-	return (result * sign);
+    return NULL;
 }

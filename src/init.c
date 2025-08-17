@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:29:40 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/15 17:13:21 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/17 15:27:11 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int init_data(t_data *data, int argc, char **argv)
 		data->nb_meals = ft_atol(argv[5]);
 	else
 		data->nb_meals = -1;
-	data->someone_died = 0;
-	
+	data->simulation_ended = 0;
 	if (data->nb_philo <= 0 || data->time_to_die <= 0
         || data->time_to_eat <= 0 || data->time_to_sleep <= 0)
         return (1);
@@ -41,7 +40,7 @@ int init_data(t_data *data, int argc, char **argv)
         pthread_mutex_init(&data->forks[i], NULL);
 		i ++;		
 	}
-	pthread_mutex_init(&data->death_mutex, NULL);
+	pthread_mutex_init(&data->simulation_mutex, NULL);
     pthread_mutex_init(&data->print_mutex, NULL);
     return (0);
 }

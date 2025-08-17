@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:55:53 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/15 17:15:11 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/17 15:31:30 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ typedef struct s_data
 	long			time_to_sleep;
 	int				nb_meals;
 	long			start_time;
-	pthread_mutex_t death_mutex;
 	pthread_mutex_t *forks;
 	pthread_mutex_t	print_mutex;
-	int				someone_died;
+	int				simulation_ended;
+	pthread_mutex_t	simulation_mutex;
 } t_data;
 
 typedef struct s_philo
@@ -59,10 +59,14 @@ int			init_philosophers(t_data *data, t_philo **philos);
 //routine
 void 		*philo_routine(void *arg);
 void 		*monitor_routine(void *arg);
+int 		is_simulation_ended(t_data *data);
+void		set_simulation_ended(t_data *data);
 
 //utils
 long		ft_atol(const char *str);
 long long 	current_time_ms(void);
 void 		precise_sleep(long duration_ms);
+void		eat_left(t_philo *philo);
+void		eat_right(t_philo *philo);
 
 #endif

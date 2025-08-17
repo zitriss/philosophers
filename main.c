@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:16:16 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/15 16:26:48 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/17 15:31:28 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     free(threads);
     free(philos);
     free(data.forks);
-
+    pthread_mutex_destroy(&data.simulation_mutex);
     return 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:05:36 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/19 16:43:10 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/19 17:05:19 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ static void	think(t_philo *philo)
 	if (think_time > 50)
 		think_time = 50;
 	pthread_mutex_lock(&data->print_mutex);
-	if (!is_simulation_ended(data))
-		printf("%lld %d is thinking\n", current_time_ms(), philo->id);
+	if (is_simulation_ended(data))
+		return ;
+	printf("%lld %d is thinking\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	usleep(1000 * think_time);
 }
@@ -45,8 +46,9 @@ static void	sleep_philo(t_philo *philo)
 
 	data = philo->data;
 	pthread_mutex_lock(&data->print_mutex);
-	if (!is_simulation_ended(data))
-		printf("%lld %d is sleeping\n", current_time_ms(), philo->id);
+	if (is_simulation_ended(data))
+		return ;
+	printf("%lld %d is sleeping\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	usleep(data->time_to_sleep * 1000);
 }

@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:35:09 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/19 13:50:04 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/19 16:44:13 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,18 @@ void	eat_left(t_philo *philo)
 	data = philo->data;
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d is eating\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d is eating\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	philo->meals_eaten++;
 	usleep(data->time_to_eat * 1000);
@@ -59,15 +62,18 @@ void	eat_right(t_philo *philo)
 	data = philo->data;
 	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d has taken a fork\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d is eating\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d is eating\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	philo->meals_eaten++;
 	usleep(data->time_to_eat * 1000);

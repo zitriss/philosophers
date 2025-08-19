@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:05:36 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/18 18:29:49 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/19 16:43:10 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void	think(t_philo *philo)
 	if (think_time > 50)
 		think_time = 50;
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d is thinking\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d is thinking\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	usleep(1000 * think_time);
 }
@@ -44,7 +45,8 @@ static void	sleep_philo(t_philo *philo)
 
 	data = philo->data;
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%lld %d is sleeping\n", current_time_ms(), philo->id);
+	if (!is_simulation_ended(data))
+		printf("%lld %d is sleeping\n", current_time_ms(), philo->id);
 	pthread_mutex_unlock(&data->print_mutex);
 	usleep(data->time_to_sleep * 1000);
 }
@@ -56,12 +58,13 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	while (!is_simulation_ended(data) && (data->nb_meals == -1
-			|| philo->meals_eaten < data->nb_meals))
+	while (!is_simulation_ended(data))
 	{
 		eat(philo);
-		sleep_philo(philo);
-		think(philo);
+		if (!is_simulation_ended(data))
+			sleep_philo(philo);
+		if (!is_simulation_ended(data))
+			think(philo);
 	}
 	return (NULL);
 }

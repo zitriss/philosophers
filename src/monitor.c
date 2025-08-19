@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 15:13:26 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/18 18:27:13 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/19 14:52:24 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ void	*monitor_routine(void *arg)
 	t_philo	*philos;
 	t_data	*data;
 	int		i;
+	int		has_eaten;
 
+	has_eaten = 0;
 	philos = (t_philo *)arg;
 	data = philos[0].data;
 	while (1)
@@ -42,7 +44,8 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < data->nb_philo)
 		{
-			if (current_time_ms() - philos[i].last_meal > data->time_to_die)
+			if (current_time_ms() - philos[i].last_meal > data->time_to_die
+				&& !is_simulation_ended(data))
 			{
 				pthread_mutex_lock(&data->print_mutex);
 				printf("Philosophe %d est mort\n", philos[i].id);
@@ -51,6 +54,13 @@ void	*monitor_routine(void *arg)
 				return (NULL);
 			}
 			i++;
+			if (data->nb_meals > 0 && philos[i].meals_eaten > data->nb_meals)
+				has_eaten ++;
+		}
+		if (has_eaten == data->nb_philo)
+		{
+			set_simulation_ended(data);
+			return (NULL);
 		}
 		usleep(1000);
 	}

@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:35:09 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/18 18:41:05 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/19 13:50:04 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	eat_left(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-void	eat_left(t_philo *philo)
+void	eat_right(t_philo *philo)
 {
 	t_data	*data;
 

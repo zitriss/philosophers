@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:16:16 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/19 16:47:20 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/20 17:19:56 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv)
 		pthread_create(&threads[i], NULL, philo_routine, &philos[i]);
 	pthread_create(&monitor_thread, NULL, monitor_routine, philos);
 	pthread_join(monitor_thread, NULL);
-    	for (i = 0; i < data.nb_philo; i++)
+    for (i = 0; i < data.nb_philo; i++)
 		pthread_join(threads[i], NULL);
 	free(threads);
 	free(philos);

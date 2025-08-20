@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:29:40 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/19 14:23:44 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/20 18:38:08 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->time_to_eat = ft_atol(argv[3]);
 	data->time_to_sleep = ft_atol(argv[4]);
 	data->nb_meals = -1;
+	data ->start_time = current_time_ms();
 	if (argc == 6)
 		data->nb_meals = ft_atol(argv[5]);
 	data->simulation_ended = 0;
@@ -54,6 +55,8 @@ int	init_philosophers(t_data *data, t_philo **philos)
 		(*philos)[i].data = data;
 		(*philos)[i].left_fork = &data->forks[i];
 		(*philos)[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+		pthread_mutex_init(&(*philos)[i].lmeal, NULL);
+		pthread_mutex_init(&(*philos)[i].emeal, NULL);
 		i ++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:05:36 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/20 19:03:36 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 07:59:49 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,21 @@ static void	think(t_philo *philo)
 		think_time = 50;
 	if (is_simulation_ended(data))
 		return ;
-	printf("%ld %d is thinking\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "is thinking");
 	usleep(1000 * think_time);
 }
 
 static void	eat(t_philo *philo)
 {
+	if (philo->data->nb_philo == 1)
+    {
+        pthread_mutex_lock(philo->left_fork);
+        safe_print(philo, "has taken a fork");
+        usleep(philo->data->time_to_die * 1000 + 1000);
+        pthread_mutex_unlock(philo->left_fork);
+        return;
+    }
+	
 	if (philo->id % 2 == 0)
 		eat_right(philo);
 	else
@@ -51,14 +59,9 @@ static void	sleep_philo(t_philo *philo)
 	t_data	*data;
 
 	data = philo->data;
-	pthread_mutex_lock(&data->print_mutex);
 	if (is_simulation_ended(data))
-	{
-		pthread_mutex_unlock(&data->print_mutex);
 		return ;
-	}
-	printf("%ld %d is sleeping\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "is sleeping");
 	usleep(data->time_to_sleep * 1000);
 }
 

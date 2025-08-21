@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:29:40 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/20 18:38:08 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 07:28:45 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	if (!data->forks)
 		return (1);
-	while (++i < data->nb_philo)
+	while (i < data->nb_philo)
+	{
 		pthread_mutex_init(&data->forks[i], NULL);
+		i++;		
+	}
 	pthread_mutex_init(&data->simulation_mutex, NULL);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	return (0);

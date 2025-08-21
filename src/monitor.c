@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 15:13:26 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/20 18:55:52 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 07:34:55 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,43 +29,22 @@ void	set_simulation_ended(t_data *data)
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 
-long	get_last_meal(t_philo *philo)
+static int check_death(t_philo *philo, t_data *data)
 {
-	long	val;
-
-	pthread_mutex_lock(&philo->lmeal);
-	val = philo->last_meal;
-	pthread_mutex_unlock(&philo->lmeal);
-	return (val);
-}
-
-int	get_meals_eaten(t_philo *philo)
-{
-	int	val;
-
-	pthread_mutex_lock(&philo->emeal);
-	val = philo->meals_eaten;
-	pthread_mutex_unlock(&philo->emeal);
-	return (val);
-}
-
-static int	check_death(t_philo philo, t_data *data)
-{
-	int	i;
-	long last_meal_copy;
-
-	i = 0;
-	last_meal_copy = get_last_meal(&philo);
-	if (current_time_ms() - last_meal_copy > data->time_to_die
-		&& !is_simulation_ended(data))
-	{
-		pthread_mutex_lock(&data->print_mutex);
-		printf("%ld %d died\n", timer(data),philo.id);
-		pthread_mutex_unlock(&data->print_mutex);
-		set_simulation_ended(data);
-		i = 1;
-	}
-	return (i);
+    pthread_mutex_lock(&philo->lmeal);
+    if (current_time_ms() - philo->last_meal > data->time_to_die
+        && !is_simulation_ended(data))
+    {
+        pthread_mutex_unlock(&philo->lmeal);
+        pthread_mutex_lock(&data->print_mutex);
+        printf("%ld %d died\n", timer(data), philo->id);
+        pthread_mutex_unlock(&data->print_mutex);
+        set_simulation_ended(data);
+        return (1);
+    }
+	else
+    	pthread_mutex_unlock(&philo->lmeal);
+    return (0);
 }
 
 static int	check_belly(t_data *data, t_philo *philos)
@@ -106,7 +85,7 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < data->nb_philo)
 		{
-			if (check_death(philos[i], data))
+			if (check_death(philos, data))
 				return (NULL);
 			i++;
 		}

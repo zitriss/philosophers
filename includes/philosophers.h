@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:55:53 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/20 18:37:30 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:06:43 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,7 @@ long 		current_time_ms(void);
 void		eat_left(t_philo *philo);
 void		eat_right(t_philo *philo);
 long 		timer(t_data *data);
+void 		safe_print(t_philo *philo, char *action);
+int			validate_arguments(int argc, char **argv);
 
 #endif

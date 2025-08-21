@@ -6,13 +6,21 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:35:09 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/20 18:39:24 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:12:35 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long current_time_ms(void)
+void	safe_print(t_philo *philo, char *action)
+{
+	pthread_mutex_lock(&philo->data->print_mutex);
+	if (!is_simulation_ended(philo->data))
+		printf("%ld %d %s\n", timer(philo->data), philo->id, action);
+	pthread_mutex_unlock(&philo->data->print_mutex);
+}
+
+long	current_time_ms(void)
 {
 	struct timeval	tv;
 
@@ -26,39 +34,29 @@ void	eat_left(t_philo *philo)
 
 	data = philo->data;
 	pthread_mutex_lock(philo->left_fork);
-	pthread_mutex_lock(&data->print_mutex);
 	if (is_simulation_ended(data))
 	{
-		pthread_mutex_unlock(&data->print_mutex);
 		pthread_mutex_unlock(philo->left_fork);
-		return ;		
+		return ;
 	}
-	printf("%ld %d has taken a fork\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "has taken a fork");
+	if (is_simulation_ended(data))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		return ;
+	}
 	pthread_mutex_lock(philo->right_fork);
-	pthread_mutex_lock(&data->print_mutex);
-	if (is_simulation_ended(data))
-	{
-		pthread_mutex_unlock(&data->print_mutex);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;		
-	}
-	printf("%ld %d has taken a fork\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->lmeal);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_unlock(&philo->lmeal);
-	pthread_mutex_lock(&data->print_mutex);
 	if (is_simulation_ended(data))
 	{
-		pthread_mutex_unlock(&data->print_mutex);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
-	printf("%ld %d is eating\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "is eating");
 	pthread_mutex_lock(&philo->emeal);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->emeal);
@@ -73,39 +71,29 @@ void	eat_right(t_philo *philo)
 
 	data = philo->data;
 	pthread_mutex_lock(philo->right_fork);
-	pthread_mutex_lock(&data->print_mutex);
 	if (is_simulation_ended(data))
 	{
-		pthread_mutex_unlock(&data->print_mutex);
 		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
-	printf("%ld %d has taken a fork\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "has taken a fork");
+	if (is_simulation_ended(data))
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		return ;
+	}
 	pthread_mutex_lock(philo->left_fork);
-	pthread_mutex_lock(&data->print_mutex);
-	if (is_simulation_ended(data))
-	{
-		pthread_mutex_unlock(&data->print_mutex);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
-	}
-	printf("%ld %d has taken a fork\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->lmeal);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_unlock(&philo->lmeal);
-	pthread_mutex_lock(&data->print_mutex);
 	if (is_simulation_ended(data))
 	{
-		pthread_mutex_unlock(&data->print_mutex);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
-	printf("%ld %d is eating\n", timer(data), philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
+	safe_print(philo, "is eating");
 	pthread_mutex_lock(&philo->emeal);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->emeal);

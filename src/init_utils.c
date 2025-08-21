@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:49:45 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/21 08:08:43 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:31:48 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	is_valid_number(char *str)
 int	validate_arguments(int argc, char **argv)
 {
 	int	i;
+
 	if (argc < 5 || argc > 6)
 		return (0);
 	i = 1;
@@ -60,7 +61,7 @@ int	validate_arguments(int argc, char **argv)
 	if (ft_atol(argv[4]) <= 0)
 		return (0);
 	if (argc == 6 && ft_atol(argv[5]) < 0)
-		return (0);	
+		return (0);
 	return (1);
 }
 

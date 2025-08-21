@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 15:13:26 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/21 07:34:55 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:35:19 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,28 @@ void	set_simulation_ended(t_data *data)
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 
-static int check_death(t_philo *philo, t_data *data)
+static int	check_death(t_philo *philo, t_data *data)
 {
-    pthread_mutex_lock(&philo->lmeal);
-    if (current_time_ms() - philo->last_meal > data->time_to_die
-        && !is_simulation_ended(data))
-    {
-        pthread_mutex_unlock(&philo->lmeal);
-        pthread_mutex_lock(&data->print_mutex);
-        printf("%ld %d died\n", timer(data), philo->id);
-        pthread_mutex_unlock(&data->print_mutex);
-        set_simulation_ended(data);
-        return (1);
-    }
+	pthread_mutex_lock(&philo->lmeal);
+	if (current_time_ms() - philo->last_meal > data->time_to_die
+		&& !is_simulation_ended(data))
+	{
+		pthread_mutex_unlock(&philo->lmeal);
+		pthread_mutex_lock(&data->print_mutex);
+		printf("%ld %d died\n", timer(data), philo->id);
+		pthread_mutex_unlock(&data->print_mutex);
+		set_simulation_ended(data);
+		return (1);
+	}
 	else
-    	pthread_mutex_unlock(&philo->lmeal);
-    return (0);
+		pthread_mutex_unlock(&philo->lmeal);
+	return (0);
 }
 
 static int	check_belly(t_data *data, t_philo *philos)
 {
 	int	i;
-	int has_eaten;
+	int	has_eaten;
 
 	i = 0;
 	has_eaten = 0;
@@ -65,7 +65,7 @@ static int	check_belly(t_data *data, t_philo *philos)
 	if (has_eaten == data->nb_philo)
 	{
 		set_simulation_ended(data);
-		return(1);
+		return (1);
 	}
 	return (0);
 }
@@ -89,11 +89,8 @@ void	*monitor_routine(void *arg)
 				return (NULL);
 			i++;
 		}
-		if (data->nb_meals> 0 && check_belly(data, philos))
-		{
-			
-			return (NULL);			
-		}
+		if (data->nb_meals > 0 && check_belly(data, philos))
+			return (NULL);
 		usleep(1000);
 	}
 	return (NULL);

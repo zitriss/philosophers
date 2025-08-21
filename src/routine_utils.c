@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:35:09 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/21 08:12:35 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:15:48 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@ long	current_time_ms(void)
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000LL + tv.tv_usec / 1000);
+}
+
+static void	eat_norm(t_philo *philo, t_data *data)
+{
+	if (is_simulation_ended(data))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		return ;
+	}
+	safe_print(philo, "is eating");
+	pthread_mutex_lock(&philo->emeal);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->emeal);
+	usleep(data->time_to_eat * 1000);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 }
 
 void	eat_left(t_philo *philo)
@@ -50,19 +67,7 @@ void	eat_left(t_philo *philo)
 	pthread_mutex_lock(&philo->lmeal);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_unlock(&philo->lmeal);
-	if (is_simulation_ended(data))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
-	}
-	safe_print(philo, "is eating");
-	pthread_mutex_lock(&philo->emeal);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->emeal);
-	usleep(data->time_to_eat * 1000);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	eat_norm(philo, data);
 }
 
 void	eat_right(t_philo *philo)
@@ -87,17 +92,5 @@ void	eat_right(t_philo *philo)
 	pthread_mutex_lock(&philo->lmeal);
 	philo->last_meal = current_time_ms();
 	pthread_mutex_unlock(&philo->lmeal);
-	if (is_simulation_ended(data))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
-	}
-	safe_print(philo, "is eating");
-	pthread_mutex_lock(&philo->emeal);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->emeal);
-	usleep(data->time_to_eat * 1000);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	eat_norm(philo, data);
 }

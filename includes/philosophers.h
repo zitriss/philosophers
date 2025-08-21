@@ -6,7 +6,7 @@
 /*   By: tlize <tlize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:55:53 by tlize             #+#    #+#             */
-/*   Updated: 2025/08/21 08:06:43 by tlize            ###   ########.fr       */
+/*   Updated: 2025/08/21 08:38:01 by tlize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ typedef struct s_philo
 	int				id;
 	int				meals_eaten;
 	long			last_meal;
-	pthread_mutex_t emeal;
-	pthread_mutex_t lmeal;
+	pthread_mutex_t	emeal;
+	pthread_mutex_t	lmeal;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
@@ -66,11 +66,11 @@ void		set_simulation_ended(t_data *data);
 
 //utils
 long		ft_atol(const char *str);
-long 		current_time_ms(void);
+long		current_time_ms(void);
 void		eat_left(t_philo *philo);
 void		eat_right(t_philo *philo);
-long 		timer(t_data *data);
-void 		safe_print(t_philo *philo, char *action);
+long		timer(t_data *data);
+void		safe_print(t_philo *philo, char *action);
 int			validate_arguments(int argc, char **argv);
 
 #endif
